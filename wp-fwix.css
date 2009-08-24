@@ -1,0 +1,17 @@
+.fwix_input{
+    text-align:right;
+}
+#fxw_feed li{
+    padding:0px;
+    margin:0px;
+    margin-bottom:10px;
+}
+#fxw_feed .time_ago{
+    color:#CC0000;
+}
+#fxw_feed .pretty{
+    color:#AAAAAA;
+}
+.fwix_link{
+    font-size:12px;
+}
