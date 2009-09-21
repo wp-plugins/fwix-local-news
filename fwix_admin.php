@@ -15,7 +15,8 @@ function fwix_widget_control(){
     $selected_val = '';
     if(isset($options['geo']))
         $selected_val = $options['geo'];
-    $json = json_decode(send_request(DATA_URL, array('method' => 'geos')), true);
+    $json = json_decode(send_request(API_URL . 'general/geos.json'), true);
+    $json = $json['result'];
     $geos[''] = 'Auto Detect City';
     foreach($json as $geo)
         $geos[$geo['id']] = $geo['pretty'];

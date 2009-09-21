@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Fwix Local News
-Plugin URI: http://wordpress.org/#
+Plugin URI: http://fwix.com
 Version: 1.0
 Author: Fwix
 Description: Displays locals news as aggregated by http://fwix.com
@@ -11,8 +11,7 @@ Description: Displays locals news as aggregated by http://fwix.com
 require_once 'fwix_admin.php';
 require_once 'fwix_widget.php';
 
-define(DATA_URL,'http://data.fwix.com/core.php');
-define(FEED_URL,'http://data.fwix.com/feed.php');
+define(API_URL,'http://api.fwix.com/');
 add_action('widgets_init', init_fwix);
 add_action('wp_head', 'addHeaderCode');
 add_action('admin_head', 'addHeaderCode');

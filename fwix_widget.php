@@ -9,16 +9,25 @@ function fwix_show_feed($args){
     $options = get_option('fwix_options');
     $story_count = $options['story_count'];
     $geo_id = $options['geo'];
-    $stories = json_decode(send_request(FEED_URL, array('geo_id' => $geo_id, 'page' => 1, 'page_size' => $story_count, 'search_ip' => $_SERVER['REMOTE_ADDR'])), true);
-    $geo_id = $stories['feed'][0]['geo'];
-    $geo_data = json_decode(send_request(DATA_URL, array('method'=>'geo_data', 'geo_id' => $geo_id)), true);
+
+    if($geo_id == ''){
+        $url = API_URL . 'general/getgeo.json';
+        $params = array('ip_addr' => $_SERVER['REMOTE_ADDR']);
+    }else{
+        $url = API_URL . 'general/geoinfo.json';
+        $params = array('geo_id' => $geo_id);
+    }
+    $geo_data = json_decode(send_request($url, $params), true);
+    $geo_data = $geo_data['result'];
+    $stories = json_decode(send_request(API_URL . 'fetch/recent.json', array('geo_id' => $geo_data['id'], 'page_num' => 1, 'page_size' => $story_count)), true);
+    $stories = $stories['result'];
 
     echo $args['before_widget'].$args['before_title'].$geo_data['pretty']." Local News".$args['after_title']."\n";
     echo "<ul id = 'fxw_feed'>\n";
-    foreach($stories['feed'] as $story){
+    foreach($stories as $story){
         echo "<li>\n";
-        echo "<a href = http://fwix.com/share/{$story['geo']}_{$story['storyid']}>{$story['title']}</a><br/>\n";
-        echo "<span class = 'time_ago'>".time_ago($story['print_time'])."</span> - <abbr class = 'pretty'>{$story['pretty']}</abbr>\n";
+        echo "<a href = '{$story['url']}'>{$story['title']}</a><br/>\n";
+        echo "<span class = 'time_ago'>".time_ago($story['timestamp'])."</span> - <abbr class = 'pretty'>{$story['source']}</abbr>\n";
         if($options['descriptions'])
             echo shorten_description($story['summary'])."\n";
         echo $args['after_widget']."\n";
